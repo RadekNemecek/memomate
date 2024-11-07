@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="cz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoMate</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/navigation.css">
+    <link rel="stylesheet" href="./css/onTopWindow.css">
+    <link rel="stylesheet" href="./css/editWindow.css">
+    <link rel="stylesheet" href="./css/login.css">
+
+    <script defer src="./main.js"></script>
+</head>
+
+<body>
+    <header class="navi">
+        <div class="navi-left">
+            <div class="logo">
+                <img src="./img/logo.png" alt="logo">
+                <h1>MemoMate</h1>
+            </div>
+        </div>
+
+        <div class="navi-center">
+            <div class="newMemo">
+
+                <button onclick="" id="openMyOnTopWindow"><svg xmlns=" http://www.w3.org/2000/svg" height="48px"
+                    viewBox="0 -960 960 960" width="48px" fill="#162938">
+                    <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="navi-right">
+            <nav>
+                <ul>
+                    <li onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="48px"
+                                viewBox="0 -960 960 960" width="48px" fill="#162938">
+                                <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+                            </svg></a></li>
+                </ul>
+                <ul class="sidebar">
+                    <li onclick="closeSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path
+                                    d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg></a></li>
+                    <li class="menuItem" id="sidebarNewCard"><a href="#"><svg xmlns="http://www.w3.org/2000/svg"
+                                height="24px" viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+                            </svg>Nová poznámka</a></li>
+                    <li class="menuItem login-sidebar"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path
+                                    d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
+                            </svg>Přihlášení</a></li>
+                    <li class="menuItem"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path
+                                    d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+                            </svg>About</a></li>
+                    <li class="menuItem"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path
+                                    d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z" />
+                            </svg>Contact</a></li>
+                    <li class="menuItem"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 -960 960 960" width="24px" fill="#162938">
+                                <path
+                                    d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
+                            </svg>Donate</a></li>
+                    <li class="theme"><label class="switch"><input type="checkbox" id="themeSwitcher"><span
+                                class="slider"></span></label>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="inProgress">
+            <div class="cards">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <div id="myOnTopWindow" class="onTopWindow">
+        <div class="animate__animated animate__fadeIn">
+            <span class="new-title">
+                <h3>Nová poznámka</h3>
+            </span>
+            <input type="text" id="userTitle" placeholder="Nadpis">
+            <textarea id="userText" placeholder="Poznámka"></textarea>
+
+            <div class="button-group">
+                <button class="cancel">Zrušit</button>
+                <button id="submitText">Uložit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="editWindow">
+
+    </div>
+
+    <div class="wrapper login-box">
+        <span class="icon-close"><svg xmlns="http://www.w3.org/2000/svg" height="27px" viewBox="0 -960 960 960"
+                width="27px" fill="#fff">
+                <path
+                    d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg></span>
+        <div class=" form-box login">
+            <h2>Přihlášení</h2>
+
+            <form id="loginForm">
+                <div class="input-box">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960"
+                            width="21px" fill="#162938">
+                            <path
+                                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z" />
+                        </svg></span>
+                    <input type="text" class="login-email">
+                    <label>E-mail</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960"
+                            width="21px" fill="#162938">
+                            <path
+                                d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
+                        </svg></span>
+                    <input type="password" class="login-pass">
+                    <label>Heslo</label>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox">
+                        Pamatuj si mě</label>
+                    <a href="#">Zapomněli jste heslo?</a>
+                </div>
+                <button type="submit" class="btn log-btn">Přihlásit se</button>
+                <div class="login-register">
+                    <p>Nemáte účet? <a href="#" class="register-link">Zaregistrujte se</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="wrapper register-box">
+        <span class="icon-close"><svg xmlns="http://www.w3.org/2000/svg" height="27px" viewBox="0 -960 960 960"
+                width="27px" fill="#fff">
+                <path
+                    d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+            </svg></span>
+        <div class="form-box register">
+            <h2>Registrace</h2>
+
+            <form id="registerForm">
+                <div class="input-box">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960"
+                            width="21px" fill="#162938">
+                            <path
+                                d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z" />
+                        </svg></span>
+                    <input type="text" name="email" class="reg-email">
+                    <label>E-mail</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960"
+                            width="21px" fill="#162938">
+                            <path
+                                d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
+                        </svg></span>
+                    <input type="password" name="password" class="reg-pass" autocomplete="new-password">
+                    <label>Heslo</label>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox" class="reg-check">
+                        Souhlasím s podmínkami</label>
+
+                </div>
+                <button type="submit" class="btn reg-btn">Registrace</button>
+                <div class="login-register">
+                    <p>Máte účet? <a href="#" class="login-link">Přihlaste se</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="wrapper info-box ">
+        <div class="form-box info ">
+            <img src="./img/sademoji.png" alt="sad emoji">
+            <p class="info-text"></p>
+            <button class="btn info-btn">OK</button>
+        </div>
+    </div>
+
+
+</body>
+
+
+</html>

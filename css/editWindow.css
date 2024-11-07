@@ -1,0 +1,42 @@
+.editWindow{
+    display: block;
+    position: fixed;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: auto;
+    overflow-y: auto;
+}
+
+.editWindow .button-group{   
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.editWindow button{
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); */
+    padding: 5px 15px;
+    background: #162938;
+    color: #fff;
+    height: 35px;
+    width: 35%;
+}
+    
+.editWindow button:hover,
+.editWindow button:focus{
+    cursor: pointer;
+}
+
+.editWindow .animate__animated h3,
+.editWindow .animate__animated input,
+.editWindow .animate__animated textarea {
+    margin-bottom: 10px;
+}

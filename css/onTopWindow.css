@@ -1,0 +1,107 @@
+.onTopWindow{
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: auto;
+    overflow-y: auto;
+}
+
+.animate__animated{
+    /* background-color: rgba(0, 0, 0, 0.3);  */
+    /* background-color: rgba(255, 204, 230, 0.8);*/
+    background: transparent;
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    display: flex;
+    flex-direction: column;
+    animation: pulse;
+    animation-duration: 0.2s;
+
+    border: 2px solid rgba(255, 255, 255, .5);
+}
+
+.new-title {
+    display: flex;
+    justify-content: center;
+    color: #162938;
+    padding-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.button-group{
+    display: flex;
+    justify-content: space-between;
+}
+
+.onTopWindow button{   
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); */
+    padding: 5px 15px;
+    background: #162938;
+    color: #fff;
+    height: 35px;
+    width: 30%;
+}
+
+.onTopWindow button:hover,
+.onTopWindow button:focus{
+    cursor: pointer;
+}
+
+.close{
+    color: #ff0f5b;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus{
+    color: rgb(72, 255, 0);
+    cursor: pointer;
+}
+
+.animate__animated input{
+    width:100%;
+    box-sizing: border-box;
+    height: 30px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 20px;
+    outline: none;
+    padding: 5px;
+
+   /*  background: transparent;
+    border-bottom: 2px solid rgba(0, 0, 0, 1);
+    border-radius: 0;
+    outline: none; */
+}
+
+.animate__animated textarea{
+    width:100%;
+    box-sizing: border-box;
+    height: 130px;
+    border-radius: 6px;
+    border: none;
+    margin-bottom: 10px;
+    outline: none;
+    padding: 5px;
+
+  /*   background: transparent;
+    border-bottom: 2px solid rgba(0, 0, 0, 1);
+    border-radius: 0;
+    outline: none; */
+}
