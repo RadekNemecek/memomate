@@ -10,7 +10,7 @@
     overflow-y: auto;
 }
 
-.animate__animated{
+.popup{
     /* background-color: rgba(0, 0, 0, 0.3);  */
     /* background-color: rgba(255, 204, 230, 0.8);*/
     background: transparent;
@@ -27,6 +27,8 @@
     animation-duration: 0.2s;
 
     border: 2px solid rgba(255, 255, 255, .5);
+    animation: pulse;
+    animation-duration: .3s;
 }
 
 .new-title {
@@ -74,7 +76,7 @@
     cursor: pointer;
 }
 
-.animate__animated input{
+.popup input{
     width:100%;
     box-sizing: border-box;
     height: 30px;
@@ -90,7 +92,7 @@
     outline: none; */
 }
 
-.animate__animated textarea{
+.popup textarea{
     width:100%;
     box-sizing: border-box;
     height: 130px;
