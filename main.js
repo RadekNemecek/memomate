@@ -1,309 +1,31 @@
 
-// vytvoreni nove karty a pripnuti na stranku
-function createNewCardByButton(title, content, dateCreated, cardId) {
-
-    // vytvorit novy HTML element (li)
-    let newCard = document.createElement('li');
-    newCard.id = `card-${cardId}`;
 
 
-    //vytvor obsah do karty
-    newCard.innerHTML = `
-    <header class="controls">
-    <div class="cont-left">
-    ${dateCreated}
-    </div>
-    <div class="cont-center">
-    
-    </div>
-    <div class="cont-right">
-    <button onclick= "editCard(${cardId})" class="edit" id="${cardId}" title="Editovat"></button>
-    <button class="done" title="Dokončeno"></button>
-    </div>
-    </header>                                                   
-        <h3>${title}</h3>
-        <p>
-            ${content}
-        </p>
-    `;
-
-    // Přidání události kliknutí na tlačítko "Done" pro aktualizaci hodnoty v databázi
-    newCard.querySelector('.done').addEventListener('click', () => updateIsCompleted(cardId));
-
-    // vlozit novy element do rodice
-    cardContainer.appendChild(newCard);
-}
-
-//odeslani dat do databaze
-function sendDataToDatabase(title, content, dateCreated) {
-
-    fetch("sendToDatabase.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: title, content: content })
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Data byla úspěšně odeslána:", data);
-            fetchData();
-        })
-
-        .catch(error => console.error("Chyba:", error));
-}
-
-// nacteni dat z databaze a zavolani loadData()
-function fetchData() {
-    return fetch('./fetchFromDatabase.php')
-        .then(response => response.json())
-        .then(cards => {
-            databaseData = cards.map(item => {
-                const date = new Date(item.date_created);
-                const formattedDate = `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
-
-                return {
-                    cardId: item.id,
-                    title: item.title,
-                    content: item.content,
-                    dateCreated: formattedDate
-                };
-            });
-            console.log("Data načtena:", databaseData);
-            loadData();
-        })
-        .catch(error => console.error("Chyba při načítání dat:", error));
-}
-
-// nacte data, promaze <ul>, vytvori nove karty
-function loadData() {
-    // promaze obsah, aby nevznikly duplicity
-    const cardContainer = document.querySelector('.cards ul');
-    cardContainer.innerHTML = '';
-
-    databaseData.forEach(card => {
-        createNewCardByButton(card.title, card.content, card.dateCreated, card.cardId);
-    });
-}
-
-// oznaci poznamku jako splnenou
-function updateIsCompleted(cardId) {
-    console.log("Odesílám data:", { id: cardId, is_completed: 1 }); //po debugu smazat
-    fetch("updateIsCompleted.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: cardId, is_completed: 1 })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log("Karta byla úspěšně označena jako dokončená v databázi.");
-                fetchData();
-            } else {
-                console.error("Chyba při aktualizaci:", data.error);
-            }
-        })
-        .catch(error => console.error("Chyba:", error));
-}
-
-// editace poznamky
-function editCard(cardId) {
-    //vytvoreni elementu
-    let editWindow = document.createElement('div');
-    editWindow.className = 'animate__animated animate__fadeIn';
-
-    //najdi kartu s odpovidajicim ID
-    const card = databaseData.find(item => item.cardId === String(cardId));
-
-    //ukonceni funkce, pokud karta nenalezena
-    if (!card) {
-        console.log(`Karta s id ${cardId} nebyla nalezena.`);
-        return;
-    }
-
-    // Formatovani obsahu karty, aby se nahradily <br> znaky novym radkem
-    const formattedContent = card.content.replace(/<br\s*\/?>/gi, '\n');
-
-    //naplneni elementu vcetne puvodniho textu
-    editWindow.innerHTML = `
-            <h3>Editace poznámky id: ${cardId}</h3>
-            <input type="text" id="editTitle" value="${card.title}" />
-            <textarea id="editContent">${formattedContent}</textarea>
-            <div class="button-group">
-                <button class="cancel">Zrušit</button>
-                <button class="updateCard">Aktualizovat</button>
-            </div>
-    `
-
-    // pridani elementu na stranku
-    editContainer.appendChild(editWindow);
-
-    //Cancel - zavreni a odebrani okna z DOM
-    const cancelButton = editWindow.querySelector('.cancel');
-    cancelButton.addEventListener('click', () => {
-        editContainer.removeChild(editWindow);
-    });
-
-
-    // Funkce pro uložení změn
-    function saveChanges() {
-        const updatedTitle = document.getElementById('editTitle').value;
-        const updatedContent = document.getElementById('editContent').value;
-
-        // Převod nových řádků na <br>
-        const formattedContent = updatedContent.replace(/\n/g, '<br>');
-
-        fetch('editCard.php', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cardId, title: updatedTitle, content: formattedContent })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Zavrit okno a aktualizovat karty na strance
-                    editContainer.removeChild(editWindow);
-                    fetchData();
-                } else {
-                    console.error("Chyba při aktualizaci:", data.error);
-                }
-            })
-            .catch(error => console.error("Chyba:", error));
-    }
-
-    // Přidání event listeneru pro tlačítko Aktualizovat
-    const updateButton = editWindow.querySelector('.updateCard');
-    updateButton.addEventListener('click', saveChanges);
-}
-
-// zobrazi menu
-function showSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.style.display = 'flex';
-}
-
-// skryje menu
-function closeSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.style.display = 'none';
-}
-
-// validace registracniho formulare
-function validateRegForm(event) {
-
-    const email = document.querySelector('.reg-email').value;
-    const password = document.querySelector('.reg-pass').value;
-    const terms = document.querySelector('.reg-check');
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const infoBox = document.querySelector('.wrapper.info-box');
-    const registerBox = document.querySelector('.wrapper.register-box');
-    const infoBoxButton = document.querySelector('.btn.info-btn');
-    const infoText = document.querySelector('.info-text');
-
-    let tipInfo = '';
-
-    infoText.textContent = tipInfo;
-
-    infoBoxButton.addEventListener('click', function () {
-        registerBox.style.visibility = 'visible';
-        infoBox.style.visibility = 'hidden';
-        document.querySelector('.reg-email').focus();
-    })
-
-    if (email === '' || !emailPattern.test(email)) {
-        tipInfo = 'Zkontrolujte emailovou adresu';
-        infoText.textContent = tipInfo;
-        infoBox.style.visibility = 'visible';
-        registerBox.style.visibility = 'hidden';
-        infoBoxButton.focus();
-
-        return false;
-    }
-
-    if (password === '' || password.length < 6 || password.length > 20) {
-        tipInfo = 'Heslo musí mít 6 až 20 znaků';
-        infoText.textContent = tipInfo;
-        infoBox.style.visibility = 'visible';
-        registerBox.style.visibility = 'hidden';
-        infoBoxButton.focus();
-
-        return false;
-    }
-
-    if (!terms.checked) {
-        tipInfo = 'Musíte souhlasit s podmínkami';
-        infoText.textContent = tipInfo;
-        infoBox.style.visibility = 'visible';
-        registerBox.style.visibility = 'hidden';
-        infoBoxButton.focus();
-
-        return false;
-    }
-
-    return true;
-
-}
-
-// odeslani registracniho formulare
-function submitRegistration() {
-    const email = document.querySelector('.reg-email').value.trim();
-    const password = document.querySelector('.reg-pass').value.trim();
-
-    const emailInput = document.querySelector('.reg-email');
-    const passwordInput = document.querySelector('.reg-pass');
-
-    const infoBox = document.querySelector('.wrapper.info-box');
-    const registerBox = document.querySelector('.wrapper.register-box');
-    const infoBoxButton = document.querySelector('.btn.info-btn');
-    const infoText = document.querySelector('.info-text');
-    const emojiImage = document.querySelector('.form-box.info img');
-
-    let tipInfo = '';
-
-    infoText.textContent = tipInfo;
-
-
-    fetch('register.php', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            tipInfo = 'registrace byla úspěšná';
-            infoText.textContent = tipInfo;
-            emojiImage.src = './img/loveemoji.png'
-            infoBox.style.background = 'darkseagreen';
-            infoBox.style.visibility = 'visible';
-
-            infoBoxButton.onclick = function () {
-                infoBox.style.visibility = 'hidden';
-                registerBox.style.visibility = 'hidden';
-                emailInput.value = '';
-                passwordInput.value = '';
-            };
-        })
-
-        .catch(error => console.error('chyba:', error));
-}
 
 // --------------------------------------------
 //                  HLAVNI KOD
 // --------------------------------------------
 
-let databaseData = []; // Globalni promena pro ulozeni formatovanych dat z databaze
-
 fetchData(); // Nacist data do globalni promenne databaseData
 
-// -----------vytvoreni nove karty-------------
-// najit rodice, do ktereho budu pridavat HTML
-const cardContainer = document.querySelector('.cards ul');
+let databaseData = []; // Globalni promena pro ulozeni formatovanych dat z databaze
 
-// Ziskani prvku z HTML
+const editContainer = document.querySelector('.editWindow'); //najit rodice pro editacni okno
+
+
+//---------------------------------------------
+// -----------vytvoreni nove karty-------------
+//---------------------------------------------
+
+const cardContainer = document.querySelector('.cards ul'); // najit rodice pro <li> elementy
 const openWindowBtn = document.getElementById('openMyOnTopWindow'); //okno pro novou card
 const openWindowSidebarBtn = document.getElementById('sidebarNewCard'); //okno pro novou card ze sidebaru
 const onTopWindow = document.getElementById('myOnTopWindow');
 const submitTextBtn = document.getElementById('submitText');
+
 let content = ''; //pozdeji bude obsahovat zadany text uzivatele
 let title = '';  //pozdeji bude obsahovat zadany text uzivatele
+
 
 // Otevrit okno pro novy card po kliknuti na button
 openWindowBtn.onclick = function () {
@@ -351,11 +73,11 @@ submitTextBtn.onclick = function () {
     sendDataToDatabase(title, content);
 }
 
-// ------------vytvoreni okna pro editaci---------------------
-//najit rodice pro editacni okno
-const editContainer = document.querySelector('.editWindow');
 
+//------------------------------------------------------------
 // -------------uprava css pomoci prepinace-------------------
+//------------------------------------------------------------
+
 const switcher = document.getElementById('themeSwitcher');
 
 // Nacteni stavu z localStorage pri nacteni stranky
@@ -385,7 +107,10 @@ document.addEventListener('click', (event) => {
     }
 })
 
-//-------------------register/login formular-------------------
+//--------------------------------------------------------
+//--------------register/login formular-------------------
+//--------------------------------------------------------
+
 const loginSidebar = document.querySelector('.login-sidebar');
 const iconClose = document.querySelectorAll('.icon-close');
 const cancelButton = document.querySelector('.cancel');
@@ -446,15 +171,7 @@ regForm.addEventListener('submit', function (event) {
 
 })
 
-
-
-// --------------------------------------------
-//               Prostor pro testy
-// --------------------------------------------
-
-
-
-
+// validace a odeslání login formulare
 const loginForm = document.getElementById('loginForm');
 loginForm.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -468,78 +185,17 @@ loginForm.addEventListener('submit', function (event) {
     }
 })
 
-function validateLoginForm(event) {
+// --------------------------------------------
+//               Prostor pro testy
+// --------------------------------------------
 
-    const email = document.querySelector('.login-email').value;
-    const password = document.querySelector('.login-pass').value;
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const loginBox = document.querySelector('.wrapper.login-box');
-    const infoBox = document.querySelector('.wrapper.info-box');
-    const infoBoxButton = document.querySelector('.btn.info-btn');
-    const infoText = document.querySelector('.info-text');
 
-    let tipInfo = '';
 
-    infoText.textContent = tipInfo;
 
-    infoBoxButton.addEventListener('click', function () {
-        loginBox.style.visibility = 'visible';
-        infoBox.style.visibility = 'hidden';
-        document.querySelector('.login-email').focus();
-    })
 
-    if (email === '' || !emailPattern.test(email)) {
-        console.log('zkontroluj email');
-        tipInfo = 'Zkontrolujte emailovou adresu';
-        infoText.textContent = tipInfo;
-        infoBox.style.visibility = 'visible';
-        loginBox.style.visibility = 'hidden';
-        infoBoxButton.focus();
 
-        return false;
-    }
 
-    if (password === '' || password.length < 6 || password.length > 20) {
-        tipInfo = 'Heslo musí mít 6 až 20 znaků';
-        infoText.textContent = tipInfo;
-        infoBox.style.visibility = 'visible';
-        loginBox.style.visibility = 'hidden';
-        infoBoxButton.focus();
 
-        return false;
-    }
-
-    return true;
-}
-
-function submitLogin() {
-
-    const email = document.querySelector('.login-email').value.trim();
-    const password = document.querySelector('.login-pass').value.trim();
-
-    fetch('login.php', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password })
-    })
-        .then(response => response.json()) // Převedení odpovědi na JSON
-
-        .then(data => {
-            if (data.success) {
-                // Úspěšné přihlášení
-                console.log(data.message); // Můžeš zde provést přesměrování nebo jinou akci
-                // Např. přesměrování na domovskou stránku
-                // window.location.href = 'homepage.php';
-            } else {
-                // Zobrazení chybové zprávy
-                console.error(data.message);
-                // Můžeš zobrazit chybu uživateli, například v alertu
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('chyba:', error));
-
-}
 
 
 
